@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useRef } from "react";
 import FloatingHearts from "@/components/FloatingHearts";
 import CelebrationHearts from "@/components/CelebrationHearts";
+import RevealSection from "@/components/RevealSection";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -10,6 +11,15 @@ import {
   AlertDialogFooter,
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
+
+const reasons = [
+  { emoji: "💌", text: "You always check up on me when I'm sick" },
+  { emoji: "📚", text: "You skipped classes just to be there for me" },
+  { emoji: "🌙", text: "You listen when I need someone to talk to" },
+  { emoji: "🍝", text: "You understand my love for spaghetti" },
+  { emoji: "✨", text: "You make every moment brighter" },
+  { emoji: "🤗", text: "Your care feels like home" },
+];
 
 const Index = () => {
   const [saidYes, setSaidYes] = useState(false);
@@ -67,27 +77,34 @@ const Index = () => {
   }
 
   return (
-    <div
-      ref={containerRef}
-      className="min-h-screen relative overflow-hidden"
-    >
+    <div ref={containerRef} className="min-h-screen relative overflow-hidden">
       <FloatingHearts />
 
       {/* Hero */}
-      <section className="min-h-[60vh] flex items-center justify-center bg-gradient-to-b from-valentine-soft via-valentine-soft/40 to-background relative">
-        <h1
-          className="font-script text-6xl md:text-8xl text-valentine-deep animate-fade-in-up z-10"
-        >
+      <section className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-valentine-soft via-valentine-soft/40 to-background relative">
+        <h1 className="font-script text-6xl md:text-8xl text-valentine-deep animate-fade-in-up z-10">
           Hi Nenye 💕
         </h1>
+        <p
+          className="mt-6 text-foreground/50 text-sm tracking-widest uppercase animate-fade-in-up z-10"
+          style={{ animationDelay: "0.8s", animationFillMode: "both" }}
+        >
+          scroll down
+        </p>
+        <div
+          className="absolute bottom-10 animate-bounce z-10"
+          style={{ animationDelay: "1.2s" }}
+        >
+          <span className="text-valentine-mid text-2xl">↓</span>
+        </div>
       </section>
 
       {/* Love Letter */}
-      <section className="py-16 px-6 max-w-lg mx-auto relative z-10">
-        <div
-          className="animate-fade-in-up"
-          style={{ animationDelay: "0.3s", animationFillMode: "both" }}
-        >
+      <section className="py-24 px-6 relative z-10">
+        <RevealSection className="max-w-lg mx-auto">
+          <h2 className="font-script text-3xl md:text-4xl text-valentine-deep mb-8 text-center">
+            A little letter for you…
+          </h2>
           <p className="text-lg md:text-xl leading-relaxed text-foreground/85 font-light">
             I love you so much. Thank you for always checking up on me every time
             I was sick. Every time I needed someone to talk to. For skipping
@@ -95,16 +112,53 @@ const Index = () => {
             I'm very grateful for you. I promise to buy you so much spaghetti{" "}
             🍝💖
           </p>
+        </RevealSection>
+      </section>
+
+      {/* Reasons */}
+      <section className="py-24 px-6 bg-gradient-to-b from-background via-valentine-soft/20 to-background relative z-10">
+        <RevealSection className="max-w-lg mx-auto text-center mb-12">
+          <h2 className="font-script text-3xl md:text-4xl text-valentine-deep">
+            Reasons I love you 💗
+          </h2>
+        </RevealSection>
+        <div className="max-w-md mx-auto space-y-4">
+          {reasons.map((reason, i) => (
+            <RevealSection key={i} delay={i * 150}>
+              <div className="flex items-center gap-4 bg-background/60 backdrop-blur-sm rounded-2xl px-6 py-4 border border-valentine-soft/50 shadow-sm">
+                <span className="text-2xl shrink-0">{reason.emoji}</span>
+                <p className="text-foreground/80 text-base">{reason.text}</p>
+              </div>
+            </RevealSection>
+          ))}
         </div>
       </section>
 
+      {/* Sweet promise */}
+      <section className="py-24 px-6 relative z-10">
+        <RevealSection className="max-w-md mx-auto text-center">
+          <span className="text-5xl mb-6 block">🍝</span>
+          <h2 className="font-script text-3xl md:text-4xl text-valentine-deep mb-4">
+            My promise to you
+          </h2>
+          <p className="text-foreground/70 text-lg leading-relaxed">
+            I promise to always be there for you, to make you laugh even on your
+            worst days, and to buy you unlimited spaghetti for the rest of
+            forever. Deal? 💕
+          </p>
+        </RevealSection>
+      </section>
+
       {/* The Question */}
-      <section className="py-12 px-6 relative z-10">
-        <div
-          className="animate-fade-in-up max-w-md mx-auto text-center"
-          style={{ animationDelay: "0.6s", animationFillMode: "both" }}
-        >
-          <h2 className="font-script text-4xl md:text-5xl text-valentine-deep mb-10">
+      <section className="py-24 px-6 relative z-10 bg-gradient-to-b from-background via-valentine-soft/30 to-background">
+        <RevealSection className="max-w-md mx-auto text-center">
+          <h2 className="font-script text-4xl md:text-5xl text-valentine-deep mb-4">
+            So…
+          </h2>
+          <p className="text-foreground/60 text-lg mb-10">
+            I have one very important question for you.
+          </p>
+          <h2 className="font-script text-4xl md:text-5xl text-valentine-deep mb-12">
             Will you be my Valentine? 💌
           </h2>
 
@@ -138,14 +192,16 @@ const Index = () => {
               </button>
             )}
           </div>
-        </div>
+        </RevealSection>
       </section>
 
       {/* Footer */}
-      <footer className="py-12 text-center relative z-10">
-        <p className="font-script text-2xl text-valentine-mid opacity-60">
-          Made with love, always.
-        </p>
+      <footer className="py-16 text-center relative z-10">
+        <RevealSection>
+          <p className="font-script text-2xl text-valentine-mid opacity-60">
+            Made with love, always.
+          </p>
+        </RevealSection>
       </footer>
 
       {/* Popup */}
