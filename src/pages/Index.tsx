@@ -38,7 +38,7 @@ const Index = () => {
   useEffect(() => {
     const audio = new Audio(sound);
     audio.preload = "auto";
-
+    audioRef.current = audio;
     const handleCanPlay = () => {
       setAudioReady(true);
       setPageReady(true); // Audio is ready, so page is definitely ready
