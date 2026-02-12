@@ -2,6 +2,7 @@ import React, { useState, useCallback, useRef } from "react";
 import FloatingHearts from "@/components/FloatingHearts";
 import CelebrationHearts from "@/components/CelebrationHearts";
 import RevealSection from "@/components/RevealSection";
+import MusicToggle from "@/components/MusicToggle";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -17,6 +18,7 @@ const reasons = [
   { emoji: "📚", text: "You skipped classes just to be there for me" },
   { emoji: "🌙", text: "You listen when I need someone to talk to" },
   { emoji: "🍝", text: "You understand my love for spaghetti" },
+  { emoji: "🎄", text: "You spent Christmas at my family house — that meant everything" },
   { emoji: "✨", text: "You make every moment brighter" },
   { emoji: "🤗", text: "Your care feels like home" },
 ];
@@ -58,6 +60,7 @@ const Index = () => {
       <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-valentine-soft via-background to-valentine-soft relative overflow-hidden">
         <CelebrationHearts />
         <FloatingHearts count={20} />
+        <MusicToggle />
         <div className="animate-fade-in-up animate-soft-glow rounded-3xl bg-background/80 backdrop-blur-sm px-8 py-12 mx-4 max-w-md text-center z-10">
           <h1 className="font-script text-5xl md:text-6xl text-valentine-deep mb-6">
             Yessss Nenye!!!
@@ -65,6 +68,9 @@ const Index = () => {
           <p className="text-2xl mb-2">💖</p>
           <p className="text-lg text-foreground/80 leading-relaxed">
             You just made me the happiest guy alive.
+          </p>
+          <p className="text-base text-foreground/60 mt-4 italic">
+            — Gideon 💕
           </p>
         </div>
         <footer className="absolute bottom-8 z-10">
@@ -79,6 +85,7 @@ const Index = () => {
   return (
     <div ref={containerRef} className="min-h-screen relative overflow-hidden">
       <FloatingHearts />
+      <MusicToggle />
 
       {/* Hero */}
       <section className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-valentine-soft via-valentine-soft/40 to-background relative">
@@ -109,8 +116,12 @@ const Index = () => {
             I love you so much. Thank you for always checking up on me every time
             I was sick. Every time I needed someone to talk to. For skipping
             classes for me. I didn't realize it sooner, but I love you very much.
-            I'm very grateful for you. I promise to buy you so much spaghetti{" "}
-            🍝💖
+            I'm so grateful you spent Christmas at my family house — that meant
+            the world to me. I'm very grateful for you. I promise to buy you so
+            much spaghetti 🍝💖
+          </p>
+          <p className="text-right text-foreground/50 mt-6 italic text-sm">
+            — With all my love, Gideon
           </p>
         </RevealSection>
       </section>
@@ -142,9 +153,9 @@ const Index = () => {
             My promise to you
           </h2>
           <p className="text-foreground/70 text-lg leading-relaxed">
-            I promise to always be there for you, to make you laugh even on your
-            worst days, and to buy you unlimited spaghetti for the rest of
-            forever. Deal? 💕
+            I, Gideon, promise to always be there for you, to make you laugh even
+            on your worst days, and to buy you unlimited spaghetti for the rest
+            of forever. Deal? 💕
           </p>
         </RevealSection>
       </section>
