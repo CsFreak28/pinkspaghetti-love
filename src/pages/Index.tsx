@@ -32,16 +32,42 @@ const Index = () => {
   const [showMusicPrompt, setShowMusicPrompt] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [pageReady, setPageReady] = useState(false); // Controls the loading screen
+  const [audioReady, setAudioReady] = useState(false); // Controls the music prompt
+
   useEffect(() => {
     const audio = new Audio(sound);
     audio.preload = "auto";
 
-    audio.addEventListener("canplaythrough", () => {
-      setAudioLoaded(true);
+    const handleCanPlay = () => {
+      setAudioReady(true);
+      setPageReady(true); // Audio is ready, so page is definitely ready
       audioRef.current = audio;
-      setShowMusicPrompt(true); // show dialog AFTER load
-    });
+      setShowMusicPrompt(true); // Show prompt now
+    };
+
+    audio.addEventListener("canplaythrough", handleCanPlay);
+
+    // SAFETY FALLBACK:
+    // If audio is slow, show the page anyway after 2.5 seconds
+    // but don't show the music prompt yet.
+    const timer = setTimeout(() => {
+      setPageReady(true);
+    }, 2500);
+
+    return () => {
+      audio.removeEventListener("canplaythrough", handleCanPlay);
+      clearTimeout(timer);
+    };
   }, []);
+
+  // When audio finally finishes loading in the background,
+  // this effect triggers the prompt later.
+  useEffect(() => {
+    if (audioReady && pageReady) {
+      setShowMusicPrompt(true);
+    }
+  }, [audioReady, pageReady]);
 
   const [saidYes, setSaidYes] = useState(false);
   const [noCount, setNoCount] = useState(0);
@@ -77,11 +103,11 @@ const Index = () => {
   if (saidYes) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-valentine-soft via-background to-valentine-soft relative overflow-hidden">
-        {!audioLoaded && (
+        {!pageReady && (
           <div
             className={`fixed inset-0 z-[9999] flex items-center justify-center bg-valentine-deep transition-opacity duration-1000`}
           >
-            {!audioLoaded && (
+            {!pageReady && (
               <div className="flex flex-col items-center gap-6">
                 <h1 className="font-script text-4xl md:text-6xl text-white animate-pulse">
                   Hey baby… are you ready? 💕
@@ -135,11 +161,11 @@ const Index = () => {
     <div ref={containerRef} className="min-h-screen relative overflow-hidden">
       <FloatingHearts />
       {/* <MusicToggle /> */}
-      {!audioLoaded && (
+      {!pageReady && (
         <div
           className={`fixed inset-0 z-[9999] flex items-center justify-center bg-valentine-deep transition-opacity duration-1000`}
         >
-          {!audioLoaded && (
+          {!pageReady && (
             <div className="flex flex-col items-center gap-6">
               <h1 className="font-script text-4xl md:text-6xl text-white animate-pulse">
                 Hey baby… are you ready? 💕
