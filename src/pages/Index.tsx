@@ -55,9 +55,13 @@ const Index = () => {
       setPageReady(true);
     }, 2500);
 
+    const promptTimer = setTimeout(() => {
+      setShowMusicPrompt(true);
+    }, 5000);
     return () => {
       audio.removeEventListener("canplaythrough", handleCanPlay);
       clearTimeout(timer);
+      clearTimeout(promptTimer);
     };
   }, []);
 
@@ -374,11 +378,14 @@ const Index = () => {
                 if (audioRef.current) {
                   audioRef.current.loop = true;
                   audioRef.current.volume = 0.3;
-                  audioRef.current.play(); // ✅ This now works
+                  // .play() returns a promise, it's good practice to catch errors
+                  audioRef.current
+                    .play()
+                    .catch((e) => console.log("Audio play failed:", e));
                 }
                 setShowMusicPrompt(false);
               }}
-              className="rounded-full bg-gradient-to-r from-valentine-mid to-valentine-deep text-primary-foreground px-6"
+              className="..."
             >
               Yes Baby 🎵
             </AlertDialogAction>
