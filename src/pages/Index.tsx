@@ -3,7 +3,7 @@ import FloatingHearts from "@/components/FloatingHearts";
 import CelebrationHearts from "@/components/CelebrationHearts";
 import RevealSection from "@/components/RevealSection";
 import MusicToggle from "@/components/MusicToggle";
-import sound from "../withasmile.mp3";
+import sound from "../thirdaudio.mp3";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -53,11 +53,11 @@ const Index = () => {
     // but don't show the music prompt yet.
     const timer = setTimeout(() => {
       setPageReady(true);
-    }, 2500);
+    }, 5500);
 
     const promptTimer = setTimeout(() => {
       setShowMusicPrompt(true);
-    }, 5000);
+    }, 8000);
     return () => {
       audio.removeEventListener("canplaythrough", handleCanPlay);
       clearTimeout(timer);
