@@ -1,22 +1,33 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import mysong from "../withasmile.mp3";
 
 const MusicToggle: React.FC = () => {
-  const [playing, setPlaying] = useState(false);
+  const [playing, setPlaying] = useState(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
+  useEffect(() => {
+    const audio = new Audio(mysong);
+    audio.loop = true;
+    audio.volume = 0.3;
+
+    audioRef.current = audio;
+
+    // Try autoplay
+    audio.play().catch(() => {
+      // Autoplay blocked
+      setPlaying(false);
+    });
+  }, []);
+
   const toggle = () => {
-    if (!audioRef.current) {
-      audioRef.current = new Audio(
-        "https://cdn.pixabay.com/audio/2022/02/23/audio_ea70ad08e0.mp3"
-      );
-      audioRef.current.loop = true;
-      audioRef.current.volume = 0.3;
-    }
+    if (!audioRef.current) return;
+
     if (playing) {
       audioRef.current.pause();
     } else {
       audioRef.current.play();
     }
+
     setPlaying(!playing);
   };
 

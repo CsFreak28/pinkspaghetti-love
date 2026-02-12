@@ -1,8 +1,9 @@
-import React, { useState, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import FloatingHearts from "@/components/FloatingHearts";
 import CelebrationHearts from "@/components/CelebrationHearts";
 import RevealSection from "@/components/RevealSection";
 import MusicToggle from "@/components/MusicToggle";
+import sound from "../withasmile.mp3";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -14,16 +15,34 @@ import {
 } from "@/components/ui/alert-dialog";
 
 const reasons = [
-  { emoji: "💌", text: "You always check up on me when I'm sick" },
+  { emoji: "💌", text: "You always check up on me when I'm down" },
   { emoji: "📚", text: "You skipped classes just to be there for me" },
   { emoji: "🌙", text: "You listen when I need someone to talk to" },
-  { emoji: "🍝", text: "You understand my love for spaghetti" },
-  { emoji: "🎄", text: "You spent Christmas at my family house — that meant everything" },
-  { emoji: "✨", text: "You make every moment brighter" },
+  { emoji: "🍝", text: "You understand me so much" },
+  {
+    emoji: "🎄",
+    text: "You spent Christmas at my family house — that meant everything",
+  },
+  { emoji: "✨", text: "You make every singleeee moment brighter" },
   { emoji: "🤗", text: "Your care feels like home" },
 ];
 
 const Index = () => {
+  const [audioLoaded, setAudioLoaded] = useState(false);
+  const [showMusicPrompt, setShowMusicPrompt] = useState(false);
+
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  useEffect(() => {
+    const audio = new Audio(sound);
+    audio.preload = "auto";
+
+    audio.addEventListener("canplaythrough", () => {
+      setAudioLoaded(true);
+      audioRef.current = audio;
+      setShowMusicPrompt(true); // show dialog AFTER load
+    });
+  }, []);
+
   const [saidYes, setSaidYes] = useState(false);
   const [noCount, setNoCount] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
@@ -43,7 +62,7 @@ const Index = () => {
   const handleNo = () => {
     if (noCount === 0) {
       setPopupMsg(
-        "Just dey play!!!!!, okay now, your phone will self-destruct in 30 seconds if you don't go back and click yes 😭💣"
+        "Just dey play!!!!!, okay now, your phone will self-destruct in 30 seconds if you don't go back and click yes 😭💣",
       );
       setShowPopup(true);
       setNoCount(1);
@@ -58,6 +77,36 @@ const Index = () => {
   if (saidYes) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-valentine-soft via-background to-valentine-soft relative overflow-hidden">
+        {!audioLoaded && (
+          <div
+            className={`fixed inset-0 z-[9999] flex items-center justify-center bg-valentine-deep transition-opacity duration-1000`}
+          >
+            {!audioLoaded && (
+              <div className="flex flex-col items-center gap-6">
+                <h1 className="font-script text-4xl md:text-6xl text-white animate-pulse">
+                  Hey baby… are you ready? 💕
+                </h1>
+                <p className="text-white/70 text-sm tracking-widest">
+                  Loading something special...
+                </p>
+
+                {/* Pulsing hearts */}
+                <div className="flex gap-4 mt-4">
+                  {[1, 2, 3].map((i) => (
+                    <span
+                      key={i}
+                      className="text-4xl animate-ping"
+                      style={{ animationDelay: `${i * 200}ms` }}
+                    >
+                      ❤️
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
         <CelebrationHearts />
         <FloatingHearts count={20} />
         <MusicToggle />
@@ -67,7 +116,7 @@ const Index = () => {
           </h1>
           <p className="text-2xl mb-2">💖</p>
           <p className="text-lg text-foreground/80 leading-relaxed">
-            You just made me the happiest guy alive.
+            You just made me, Gideon 🥹, the happiest guy alive.
           </p>
           <p className="text-base text-foreground/60 mt-4 italic">
             — Gideon 💕
@@ -85,8 +134,36 @@ const Index = () => {
   return (
     <div ref={containerRef} className="min-h-screen relative overflow-hidden">
       <FloatingHearts />
-      <MusicToggle />
+      {/* <MusicToggle /> */}
+      {!audioLoaded && (
+        <div
+          className={`fixed inset-0 z-[9999] flex items-center justify-center bg-valentine-deep transition-opacity duration-1000`}
+        >
+          {!audioLoaded && (
+            <div className="flex flex-col items-center gap-6">
+              <h1 className="font-script text-4xl md:text-6xl text-white animate-pulse">
+                Hey baby… are you ready? 💕
+              </h1>
+              <p className="text-white/70 text-sm tracking-widest">
+                Loading something special...
+              </p>
 
+              {/* Pulsing hearts */}
+              <div className="flex gap-4 mt-4">
+                {[1, 2, 3].map((i) => (
+                  <span
+                    key={i}
+                    className="text-4xl animate-ping"
+                    style={{ animationDelay: `${i * 200}ms` }}
+                  >
+                    ❤️
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
       {/* Hero */}
       <section className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-valentine-soft via-valentine-soft/40 to-background relative">
         <h1 className="font-script text-6xl md:text-8xl text-valentine-deep animate-fade-in-up z-10">
@@ -113,12 +190,31 @@ const Index = () => {
             A little letter for you…
           </h2>
           <p className="text-lg md:text-xl leading-relaxed text-foreground/85 font-light">
-            I love you so much. Thank you for always checking up on me every time
-            I was sick. Every time I needed someone to talk to. For skipping
-            classes for me. I didn't realize it sooner, but I love you very much.
-            I'm so grateful you spent Christmas at my family house — that meant
-            the world to me. I'm very grateful for you. I promise to buy you so
-            much spaghetti 🍝💖
+            I love you so much. Thank you for always checking up on me every
+            time I was sick. Every time I needed someone to talk to. For
+            skipping classes for me. I didn't realize it sooner, but I love you
+            very much. I'm so grateful you spent Christmas at my family house —
+            that meant the world to me. Having you spend Christmas at my
+            family’s house meant more to me than I can explain. Seeing you
+            there, laughing, being part of my world… it felt right. <br />{" "}
+            <br /> You made both my parents happy... <br /> <br />I know I’m
+            currently hurting, confused, and emotional. But the only thing I’m
+            sure of in my life right now is that I love you, Nenye. That’s the
+            only thing I’m completely certain about. When everything feels
+            overwhelming and my thoughts are all over the place, my heart is
+            still clear about you. If I ever made you feel unsure, I’m sorry.
+            Truly. But please don’t confuse a difficult moment with a lack of
+            love. I love you deeply. Completely. Not in a surface-level or
+            convenient way, but in a way that is steady and intentional. Even in
+            my confusion, even in my emotions, my love for you has never been a
+            question. It’s real. It’s constant. And it’s yours. <br /> <br />{" "}
+            I'm very grateful for you. My love, one of the things I adore most
+            about you is how predictable you are — but only because your love
+            for me never changes. I can predict that you’ll check on me when I’m
+            not okay. I can predict that you’ll show up when I need you. I can
+            predict that you’ll choose me, every single time. And that kind of
+            “predictable” is the safest, most beautiful feeling in the world. I
+            promise to buy you so much spaghetti 🍝💖
           </p>
           <p className="text-right text-foreground/50 mt-6 italic text-sm">
             — With all my love, Gideon
@@ -153,9 +249,9 @@ const Index = () => {
             My promise to you
           </h2>
           <p className="text-foreground/70 text-lg leading-relaxed">
-            I, Gideon, promise to always be there for you, to make you laugh even
-            on your worst days, and to buy you unlimited spaghetti for the rest
-            of forever. Deal? 💕
+            I, Gideon, promise to always be there for you, to make you laugh
+            even on your worst days, and to buy you unlimited spaghetti for the
+            rest of forever. Deal? 💕
           </p>
         </RevealSection>
       </section>
@@ -232,6 +328,40 @@ const Index = () => {
               className="rounded-full bg-gradient-to-r from-valentine-mid to-valentine-deep text-primary-foreground px-8"
             >
               Okay 😅
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+      <AlertDialog open={showMusicPrompt} onOpenChange={setShowMusicPrompt}>
+        <AlertDialogContent className="rounded-2xl border-valentine-soft bg-background max-w-sm mx-auto">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="font-script text-2xl text-valentine-deep text-center">
+              One more thing 💕
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-center text-base leading-relaxed text-foreground/80">
+              Would you like some music while you read this?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="justify-center gap-4">
+            <AlertDialogAction
+              onClick={() => {
+                if (audioRef.current) {
+                  audioRef.current.loop = true;
+                  audioRef.current.volume = 0.3;
+                  audioRef.current.play(); // ✅ This now works
+                }
+                setShowMusicPrompt(false);
+              }}
+              className="rounded-full bg-gradient-to-r from-valentine-mid to-valentine-deep text-primary-foreground px-6"
+            >
+              Yes Baby 🎵
+            </AlertDialogAction>
+
+            <AlertDialogAction
+              onClick={() => setShowMusicPrompt(false)}
+              className="rounded-full border border-valentine-mid text-valentine-deep px-6"
+            >
+              Not really 🤫
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
